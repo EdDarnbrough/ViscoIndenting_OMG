@@ -20,4 +20,7 @@ for n = 1:2626 %length(var)
       else 
           imwrite(imind,cm,filename,'gif','WriteMode','append'); 
       end 
-  end
+end
+  
+%If created gif doesn't run in powerpoint etc contact Ed Darnbrough he can 
+% use VirtualDub to change the codex to an animated gif
