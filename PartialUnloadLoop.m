@@ -8,16 +8,17 @@ for q = 1:length(names)
         eval(['var = ' names{q} '.' subnames{w} ';'])
         LoadGrad = (smooth(gradient(var.Test(:,3)),10));
         figure(69), hold on; 
-        figure(69), plot(LoadGraad); 
+        figure(69), plot(LoadGrad); 
         fin(1) = length(LoadGrad);
         for loop = 1:20 %number of unload and holds
             Ustart = find(LoadGrad(fin:-1:1)<min(LoadGrad(1:fin))./2,1);
-            Ustart = find(LoadGrad(fin-Ustart-1:-1:1)>min(LoadGrad(1:fin))./2,1)+Ustart;
+            Ustart = find(LoadGrad(fin-Ustart-1:-1:1)>min(LoadGrad(1:fin))./3,1)+Ustart;
             Hstart = find(LoadGrad(fin-Ustart:-1:1)>max(LoadGrad)./2,1);
-            figure(69), stem(fin-Ustart); figure(69), stem(fin-Ustart-Hstart);
+            figure(69), stem(fin-Ustart,10); figure(69), stem(fin-Ustart-Hstart,10);
             h = var.Test(fin-Ustart-Hstart:fin-Ustart,2).*10^-9; t = var.Test(fin-Ustart-Hstart:fin-Ustart,1);
             [strainrate, est, h, dhdt]=Disp_fit(t, h);
             %Now pick a version of your creep hold to use as correction
+            P = var.Test(fin-Ustart-Hstart:fin-Ustart,3)./(24.5*h.^2);
             %simplest here is the last dhdt
             x = var.Test(fin-Ustart:fin,2)*10^-9; y = var.Test(fin-Ustart:fin,3)*10^-6; time = var.Test(fin-Ustart:fin,1);
             x = x-time.*dhdt(end);
